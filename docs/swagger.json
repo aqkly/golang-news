@@ -1,0 +1,1008 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "description": "This is an API for BWA News",
+        "title": "BWA News API",
+        "contact": {
+            "name": "Admin",
+            "email": "admin@mail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080/api"
+        }
+    ],
+    "paths": {
+        "/login":{
+            "post":{
+                "description": "API Login",
+                "tags": ["Auth"],
+                "summary": "API Login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/categories":{
+            "get":{
+                "security":[
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "API Get Categories",
+                "tags": ["Category"],
+                "summary": "API Get Categories",
+                "responses":{
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/DefaultResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties":{
+                                                "data":{
+                                                    "type": "array",
+                                                    "items":{
+                                                        "$ref": "#/components/schemas/CategoryResponse"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post":{
+                "security":[
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "API Create Categories",
+                "tags": ["Category"],
+                "summary": "API Create Categories",
+                "parameters":[
+                    {
+                        "description": "Create Category",
+                        "name": "category",
+                        "in": "body",
+                        "schema":{
+                            "$ref": "#/components/schemas/CategoryRequest"
+                        }
+                    }
+                ],
+                "responses":{
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "admin/categories/{categoryID}":{
+            "get":{
+                "security":[
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get By ID Category",
+                "tags": ["Category"],
+                "summary": "Get By ID Category",
+                "parameters":[
+                    {
+                        "name": "categoryID",
+                        "in": "path",
+                        "required":true
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/DefaultResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties":{
+                                                "data":{
+                                                    "$ref": "#/components/schemas/CategoryResponse"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    } 
+                }
+            },
+            "put":{
+                "security":[
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update By ID Category",
+                "tags": ["Category"],
+                "summary": "Update By ID Category",
+                "parameters":[
+                    {
+                        "name": "categoryID",
+                        "in": "path",
+                        "required":true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CategoryRequest"
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete":{
+                "security":[
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete By ID Category",
+                "tags": ["Category"],
+                "summary": "Delete By ID Category",
+                "parameters":[
+                    {
+                        "name": "categoryID",
+                        "in": "path",
+                        "required":true
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/contents":{
+            "get":{
+                "security":[
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "API Get Contents",
+                "tags": ["Content"],
+                "summary": "API Get Contents",
+                "responses":{
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/DefaultResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties":{
+                                                "data":{
+                                                    "type": "array",
+                                                    "items":{
+                                                        "$ref": "#/components/schemas/ContentResponse"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post":{
+                "security":[
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "API Create Contents",
+                "tags": ["Content"],
+                "summary": "API Create Contents",
+                "parameters":[
+                    {
+                        "description": "Create Content",
+                        "name": "content",
+                        "in": "body",
+                        "schema":{
+                            "$ref": "#/components/schemas/ContentRequest"
+                        }
+                    }
+                ],
+                "responses":{
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/contents/{contentID}":{
+            "get":{
+                "security":[
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get By ID Content",
+                "tags": ["Content"],
+                "summary": "Get By ID Content",
+                "parameters":[
+                    {
+                        "name": "contentID",
+                        "in": "path",
+                        "required":true
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/DefaultResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties":{
+                                                "data":{
+                                                    "$ref": "#/components/schemas/ContentResponse"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    } 
+                }
+            },
+            "put":{
+                "security":[
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update By ID Content",
+                "tags": ["Content"],
+                "summary": "Update By ID Content",
+                "parameters":[
+                    {
+                        "name": "contentID",
+                        "in": "path",
+                        "required":true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContentRequest"
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete":{
+                "security":[
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete By ID Content",
+                "tags": ["Content"],
+                "summary": "Delete By ID Content",
+                "parameters":[
+                    {
+                        "name": "contentID",
+                        "in": "path",
+                        "required":true
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/contents/upload-image":{
+            "post":{
+                "security":[
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Upload imagge Contents",
+                "tags": ["Content"],
+                "summary": "Upload imagge Contents",
+                "requestBody":{
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "description": "Image file to upload"
+                                    }
+                                },
+                                "required": ["image"]
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DefaultResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "fe/categories":{
+            "get":{
+                "description": "API Categories",
+                "tags": ["fe"],
+                "summary": "API Categories",
+                "responses":{
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/DefaultResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties":{
+                                                "data":{
+                                                    "type": "array",
+                                                    "items":{
+                                                        "$ref": "#/components/schemas/CategoryResponse"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }, 
+        "fe/contents":{
+            "get":{
+                "description": "API Contents",
+                "tags": ["fe"],
+                "summary": "API Contents",
+                "parameters":[
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "default": 10
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "default": 10
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "orderBy",
+                        "schema": {
+                            "type": "string",
+                            "default": "created_at"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "orderType",
+                        "schema": {
+                            "type": "string",
+                            "default": "desc"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "search",
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "categoryID",
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/DefaultResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties":{
+                                                "data":{
+                                                    "type": "array",
+                                                    "items":{
+                                                        "$ref": "#/components/schemas/ContentResponse"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "fe/contents/{contentID}":{
+            "get":{
+                "description": "Get By ID Contents",
+                "tags": ["fe"],
+                "summary": "Get By ID Contents",
+                "parameters":[
+                    {
+                        "in": "path",
+                        "name": "contentID"
+                    }
+                ],
+                "responses":{
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/DefaultResponse"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties":{
+                                                "data":{
+                                                    "$ref": "#/components/schemas/ContentResponse"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        },
+        "schemas": {
+            "ErrorResponse":{
+                "type": "object",
+                "properties": {
+                    "meta": {
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "boolean",
+                                "example": false
+                            },
+                            "message":{
+                                "type": "string",
+                                "example": "error message"
+                            }
+                        }
+                    }
+                }
+            },
+            "DefaultResponse":{
+                "type": "object",
+                "properties": {
+                    "meta": {
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "boolean",
+                                "example": true
+                            },
+                            "message":{
+                                "type": "string",
+                                "example": "success"
+                            }
+                        }
+                    }
+                }
+            },
+            "LoginRequest":{
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type":"string",
+                        "example":"user@example.com"
+                    },
+                    "password": {
+                        "type":"string",
+                        "example":"password"
+                    }
+                }
+            },
+            "CategoryRequest":{
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type":"string",
+                        "example":"kategori"
+                    }
+                }
+            },
+            "ContentRequest":{
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type":"string",
+                        "example":"judul"
+                    },
+                    "excerp": {
+                        "type":"string",
+                        "example":"judul"
+                    },
+                    "description": {
+                        "type":"string",
+                        "example":"deskripsi"
+                    },
+                    "tags": {
+                        "type":"string",
+                        "example":"judul,data"
+                    },
+                    "category_id": {
+                        "type":"integer",
+                        "example":1
+                    },
+                    "status": {
+                        "type":"string",
+                        "example":"DRAFT"
+                    },
+                    "image": {
+                        "type":"string",
+                        "example":"https://image.co"
+                    }
+                }
+            },
+            "UpdatePasswordRequest":{
+                "type": "object",
+                "properties": {
+                    "current_password": {
+                        "type":"string",
+                        "example":"pass"
+                    },
+                    "new_password": {
+                        "type":"string",
+                        "example":"rahasia"
+                    },
+                    "confirm_password": {
+                        "type":"string",
+                        "example":"rahasia"
+                    }
+                }
+            },
+            "AuthResponse":{
+                "type": "object",
+                "properties": {
+                    "meta": {
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "boolean",
+                                "example": true
+                            },
+                            "message":{
+                                "type": "string",
+                                "example": "success"
+                            }
+                        }
+                    },
+                    "access_token":{
+                        "type": "string",
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+                    },
+                    "expired_at":{
+                        "type": "integer",
+                        "example": 12343434
+                    }
+                }
+            },
+            "CategoryResponse":{
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type":"integer",
+                        "example":1
+                    },
+                    "title": {
+                        "type":"string",
+                        "example":"kategori 1"
+                    },
+                    "slug": {
+                        "type":"string",
+                        "example":"kategori-1"
+                    },
+                    "created_by_name":{
+                        "type":"string",
+                        "example":"admin"
+                    }
+                }
+            },
+            "ContentResponse":{
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type":"integer",
+                        "example":1
+                    },
+                    "title": {
+                        "type":"string",
+                        "example":"judul 1"
+                    },
+                    "excerp": {
+                        "type":"string",
+                        "example":"judul 1"
+                    },
+                    "description":{
+                        "type":"string",
+                        "example":"judul"
+                    },
+                    "status":{
+                        "type":"string",
+                        "example":"DRAFT"
+                    },
+                    "image":{
+                        "type":"string",
+                        "example":"https://image.co"
+                    },
+                    "tags":{
+                        "type":"array",
+                        "items":{
+                            "type":"string",
+                            "example":"data"
+                        }
+                    },
+                    "created_at":{
+                        "type":"string",
+                        "example":"date-time"
+                    },
+                    "category_name":{
+                        "type":"string",
+                        "example":"satu"
+                    },
+                    "author":{
+                        "type":"string",
+                        "example":"admin"
+                    },
+                    "category_id":{
+                        "type":"integer",
+                        "example":1
+                    },
+                    "created_by_id":{
+                        "type":"integer",
+                        "example":1
+                    }
+                }
+            },
+            "ProfileResponse":{
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type":"integer",
+                        "example":1
+                    },
+                    "nama": {
+                        "type":"string",
+                        "example":"admin"
+                    },
+                    "email": {
+                        "type":"string",
+                        "example":"admin@example.com"
+                    },
+                    "password":{
+                        "type":"string",
+                        "example":"password"
+                    }
+                }
+            }
+        }
+    }
+}
