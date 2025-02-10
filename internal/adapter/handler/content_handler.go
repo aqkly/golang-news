@@ -331,13 +331,64 @@ func (ch *contentHandler) GetContents(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusUnauthorized).JSON(errorResp)
 	}
 
+	page := 1
+	if c.Query("page") != "" {
+		page, err = conv.StringToInt(c.Query("page"))
+		if err != nil {
+			code = "[HANDLER] GetContents - 2"
+			log.Errorw(code, err)
+			errorResp.Meta.Status = false
+			errorResp.Meta.Message = "Invalid page number"
+			return c.Status(fiber.StatusBadRequest).JSON(errorResp)
+		}
+	}
+
+	limit := 6
+	if c.Query("limit") != "" {
+		limit, err = conv.StringToInt(c.Query("limit"))
+		if err != nil {
+			code = "[HANDLER] GetContents - 3"
+			log.Errorw(code, err)
+			errorResp.Meta.Status = false
+			errorResp.Meta.Message = "Invalid limit number"
+			return c.Status(fiber.StatusBadRequest).JSON(errorResp)
+		}
+	}
+
+	orderBy := "created_at"
+	if c.Query("order_by") != "" {
+		orderBy = c.Query("order_by")
+	}
+
+	orderType := "desc"
+	if c.Query("order_type") != "" {
+		orderType = c.Query("order_type")
+	}
+
+	search := ""
+	if c.Query("search") != "" {
+		search = c.Query("search")
+	}
+
+	categoryID := 0
+	if c.Query("categoryID") != "" {
+		categoryID, err = conv.StringToInt(c.Query("categoryID"))
+		if err != nil {
+			code = "[HANDLER] GetContentWithQuery - 3"
+			log.Errorw(code, err)
+			errorResp.Meta.Status = false
+			errorResp.Meta.Message = "Invalid category ID"
+			return c.Status(fiber.StatusBadRequest).JSON(errorResp)
+		}
+	}
+
 	reqEntity := entity.QueryString{
-		Limit:      0,
-		Page:       0,
-		OrderBy:    "",
-		OrderType:  "",
-		Search:     "",
-		CategoryID: 0,
+		Limit:      limit,
+		Page:       page,
+		OrderBy:    orderBy,
+		OrderType:  orderType,
+		Search:     search,
+		CategoryID: int64(categoryID),
 	}
 
 	results, err := ch.contentService.GetContents(c.Context(), reqEntity)
