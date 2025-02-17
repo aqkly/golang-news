@@ -139,7 +139,8 @@ func (ch *contentHandler) GetContentWithQuery(c *fiber.Ctx) error {
 		CategoryID: int64(categoryID),
 	}
 
-	results, err := ch.contentService.GetContents(c.Context(), reqEntity)
+	results, totalCount, totalPages, err := ch.contentService.GetContentWithQuery(c.Context(), reqEntity)
+
 	if err != nil {
 		code = "[HANDLER] GetContentWithQuery - 3"
 		log.Errorw(code, err)
@@ -170,7 +171,17 @@ func (ch *contentHandler) GetContentWithQuery(c *fiber.Ctx) error {
 		respContents = append(respContents, respContent)
 	}
 
-	defaultSuccessResponse.Data = respContents
+	response := map[string]interface{}{
+		"data": respContents,
+		"pagination": map[string]interface{}{
+			"total_count":  totalCount,
+			"total_pages":  totalPages,
+			"current_page": page,
+			"per_page":     limit,
+		},
+	}
+
+	defaultSuccessResponse.Data = response
 	return c.JSON(defaultSuccessResponse)
 }
 

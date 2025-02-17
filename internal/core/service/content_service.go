@@ -12,6 +12,7 @@ import (
 
 type ContentService interface {
 	GetContents(ctx context.Context, query entity.QueryString) ([]entity.ContentEntity, error)
+	GetContentWithQuery(ctx context.Context, query entity.QueryString) ([]entity.ContentEntity, int64, int, error)
 	GetContentByID(ctx context.Context, id int64) (*entity.ContentEntity, error)
 	CreateContent(ctx context.Context, req entity.ContentEntity) error
 	UpdateContent(ctx context.Context, req entity.ContentEntity) error
@@ -59,6 +60,17 @@ func (c *contentService) GetContentByID(ctx context.Context, id int64) (*entity.
 	}
 
 	return result, nil
+}
+
+func (c *contentService) GetContentWithQuery(ctx context.Context, query entity.QueryString) ([]entity.ContentEntity, int64, int, error) {
+	results, totalCount, totalPages, err := c.contentRepo.GetContentWithQuery(ctx, query)
+	if err != nil {
+		code = "[SERVICE] GetContentWithQuery -1"
+		log.Errorw(code, err)
+		return nil, 0, 0, err
+	}
+
+	return results, totalCount, totalPages, nil
 }
 
 // GetContents implements ContentService.
